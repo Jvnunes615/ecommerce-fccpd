@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoramento — FCCPD Store</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">📡</span> Monitoramento dos Servicos</div>
+    <nav class="nav-links">
+      <a href="/">&larr; Voltar a loja</a>
+      <span id="lastUpdate" class="muted">—</span>
+    </nav>
+  </header>
+
+  <main class="container">
+    <p class="muted">
+      O API Gateway envia um heartbeat (<code>GET /health</code>) a cada servico periodicamente.
+      Apos falhas consecutivas, o servico e marcado como indisponivel e o gateway responde 503.
+      Esta pagina consulta <code>/status</code> a cada 2 segundos.
+    </p>
+    <div id="svcGrid" class="svc-grid"></div>
+  </main>
+
+  <script src="/assets/dashboard.js"></script>
+</body>
+</html>

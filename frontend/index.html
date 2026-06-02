@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FCCPD Store — E-commerce em Microsservicos</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">🛒</span> FCCPD Store</div>
+    <nav class="nav-links">
+      <a href="/dashboard">Monitoramento</a>
+      <span id="userInfo" class="muted">nao autenticado</span>
+      <button id="logoutBtn" class="ghost hidden">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container grid">
+    <!-- Autenticacao -->
+    <section id="authSection" class="grid cols-2">
+      <div class="card">
+        <h2>Entrar</h2>
+        <label>E-mail</label>
+        <input id="loginEmail" type="email" placeholder="voce@exemplo.com" />
+        <label>Senha</label>
+        <input id="loginPassword" type="password" placeholder="••••••••" />
+        <div class="row end" style="margin-top:14px">
+          <button id="loginBtn">Entrar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Criar conta</h2>
+        <label>Nome</label>
+        <input id="regName" placeholder="Seu nome" />
+        <label>E-mail</label>
+        <input id="regEmail" type="email" placeholder="voce@exemplo.com" />
+        <label>Senha</label>
+        <input id="regPassword" type="password" placeholder="••••••••" />
+        <label><input type="checkbox" id="regAdmin" style="width:auto" /> Registrar como admin</label>
+        <div class="row end" style="margin-top:14px">
+          <button id="registerBtn" class="ghost">Registrar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produtos -->
+    <section class="card">
+      <div class="row" style="justify-content:space-between">
+        <h2 style="margin:0">Produtos</h2>
+        <button id="reloadBtn" class="ghost">Atualizar</button>
+      </div>
+      <div id="productsList" class="products-list" style="margin-top:14px"></div>
+    </section>
+
+    <!-- Admin: criar produto -->
+    <section id="adminSection" class="card hidden">
+      <h2>Novo produto (admin)</h2>
+      <div class="grid cols-2">
+        <div>
+          <label>Nome</label>
+          <input id="pName" placeholder="Ex: Teclado mecanico" />
+          <label>Preco</label>
+          <input id="pPrice" type="number" step="0.01" placeholder="199.90" />
+        </div>
+        <div>
+          <label>Estoque</label>
+          <input id="pStock" type="number" placeholder="10" />
+          <label>Descricao</label>
+          <input id="pDesc" placeholder="Detalhes do produto" />
+        </div>
+      </div>
+      <div class="row end" style="margin-top:14px">
+        <button id="createProductBtn">Criar produto</button>
+      </div>
+    </section>
+
+    <!-- Meus pedidos -->
+    <section id="ordersSection" class="card hidden">
+      <div class="row" style="justify-content:space-between">
+        <h2 style="margin:0">Meus pedidos</h2>
+        <button id="reloadOrdersBtn" class="ghost">Atualizar</button>
+      </div>
+      <table style="margin-top:12px">
+        <thead><tr><th>Produto</th><th>Qtd</th><th>Unit.</th><th>Total</th><th>Data</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
