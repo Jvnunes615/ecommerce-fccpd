@@ -18,13 +18,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, request, jsonify
 
 from common import config, http_client
-from common.store import JsonStore
+from common.store import SqliteStore as JsonStore
 from common.auth import require_auth
 
 PORT = config.get_int("ORDERS_PORT", 5003)
 DATA_FILE = config.get(
     "ORDERS_DATA_FILE",
-    os.path.join(config.PROJECT_ROOT, "data", "orders.json"),
+    os.path.join(config.PROJECT_ROOT, "data", "orders.db"),
 )
 PRODUCTS_URL = config.get("PRODUCTS_URL", "http://localhost:5002")
 

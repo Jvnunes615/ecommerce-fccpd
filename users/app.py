@@ -16,13 +16,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, request, jsonify
 
 from common import config
-from common.store import JsonStore
+from common.store import SqliteStore as JsonStore
 from common.auth import hash_password, verify_password, sign_token, require_auth
 
 PORT = config.get_int("USERS_PORT", 5001)
 DATA_FILE = config.get(
     "USERS_DATA_FILE",
-    os.path.join(config.PROJECT_ROOT, "data", "users.json"),
+    os.path.join(config.PROJECT_ROOT, "data", "users.db"),
 )
 
 store = JsonStore(DATA_FILE)

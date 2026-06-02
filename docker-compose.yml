@@ -8,7 +8,7 @@ services:
     environment:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       USERS_PORT: 5001
-      USERS_DATA_FILE: /app/data/users.json
+      USERS_DATA_FILE: /app/data/users.db
     volumes:
       - data:/app/data
     ports:
@@ -20,7 +20,7 @@ services:
     environment:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       PRODUCTS_PORT: 5002
-      PRODUCTS_DATA_FILE: /app/data/products_primary.json
+      PRODUCTS_DATA_FILE: /app/data/products_primary.db
       PRODUCTS_PEER_URL: http://products-replica:5012
       PRODUCTS_NODE_NAME: produtos-primario
     volumes:
@@ -34,7 +34,7 @@ services:
     environment:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       PRODUCTS_PORT: 5012
-      PRODUCTS_DATA_FILE: /app/data/products_replica.json
+      PRODUCTS_DATA_FILE: /app/data/products_replica.db
       PRODUCTS_PEER_URL: http://products-primario:5002
       PRODUCTS_NODE_NAME: produtos-replica
     volumes:
@@ -48,7 +48,7 @@ services:
     environment:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       ORDERS_PORT: 5003
-      ORDERS_DATA_FILE: /app/data/orders.json
+      ORDERS_DATA_FILE: /app/data/orders.db
       PRODUCTS_URL: http://products-primario:5002
     volumes:
       - data:/app/data

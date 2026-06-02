@@ -23,13 +23,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, request, jsonify
 
 from common import config, http_client
-from common.store import JsonStore
+from common.store import SqliteStore as JsonStore
 from common.auth import require_admin
 
 PORT = config.get_int("PRODUCTS_PORT", 5002)
 DATA_FILE = config.get(
     "PRODUCTS_DATA_FILE",
-    os.path.join(config.PROJECT_ROOT, "data", "products.json"),
+    os.path.join(config.PROJECT_ROOT, "data", "products.db"),
 )
 PEER_URL = config.get("PRODUCTS_PEER_URL")  # URL da replica par (ou None)
 NODE_NAME = config.get("PRODUCTS_NODE_NAME", f"produtos:{PORT}")

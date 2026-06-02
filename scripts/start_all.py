@@ -38,13 +38,13 @@ SERVICES = [
     ("USERS", os.path.join(ROOT, "users", "app.py"), {}),
     ("PRODUCTS-PRIMARIO", os.path.join(ROOT, "products", "app.py"), {
         "PRODUCTS_PORT": PRODUCTS_PORT,
-        "PRODUCTS_DATA_FILE": os.path.join(DATA, "products_primary.json"),
+        "PRODUCTS_DATA_FILE": os.path.join(DATA, "products_primary.db"),
         "PRODUCTS_PEER_URL": PRODUCTS_REPLICA_URL,
         "PRODUCTS_NODE_NAME": "produtos-primario",
     }),
     ("PRODUCTS-REPLICA", os.path.join(ROOT, "products", "app.py"), {
         "PRODUCTS_PORT": PRODUCTS_REPLICA_PORT,
-        "PRODUCTS_DATA_FILE": os.path.join(DATA, "products_replica.json"),
+        "PRODUCTS_DATA_FILE": os.path.join(DATA, "products_replica.db"),
         "PRODUCTS_PEER_URL": PRODUCTS_URL,
         "PRODUCTS_NODE_NAME": "produtos-replica",
     }),
