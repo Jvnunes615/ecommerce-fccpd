@@ -1,0 +1,79 @@
+# Sobe toda a infraestrutura: 4 microsservicos (Produtos com 2 replicas) + Gateway.
+# Uso:  docker compose up --build
+# Acesse a loja em https://localhost:8080
+services:
+  users:
+    build: .
+    command: python users/app.py
+    environment:
+      JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
+      USERS_PORT: 5001
+      USERS_DATA_FILE: /app/data/users.db
+    volumes:
+      - data:/app/data
+    ports:
+      - "5001:5001"
+
+  products-primario:
+    build: .
+    command: python products/app.py
+    environment:
+      JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
+      PRODUCTS_PORT: 5002
+      PRODUCTS_DATA_FILE: /app/data/products_primary.db
+      PRODUCTS_PEER_URL: https://products-replica:5012
+      PRODUCTS_NODE_NAME: produtos-primario
+    volumes:
+      - data:/app/data
+    ports:
+      - "5002:5002"
+
+  products-replica:
+    build: .
+    command: python products/app.py
+    environment:
+      JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
+      PRODUCTS_PORT: 5012
+      PRODUCTS_DATA_FILE: /app/data/products_replica.db
+      PRODUCTS_PEER_URL: https://products-primario:5002
+      PRODUCTS_NODE_NAME: produtos-replica
+    volumes:
+      - data:/app/data
+    ports:
+      - "5012:5012"
+
+  orders:
+    build: .
+    command: python orders/app.py
+    environment:
+      JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
+      ORDERS_PORT: 5003
+      ORDERS_DATA_FILE: /app/data/orders.db
+      PRODUCTS_URL: https://products-primario:5002
+    volumes:
+      - data:/app/data
+    ports:
+      - "5003:5003"
+
+  gateway:
+    build: .
+    command: python gateway/app.py
+    environment:
+      JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
+      GATEWAY_PORT: 8080
+      USERS_URL: https://users:5001
+      ORDERS_URL: https://orders:5003
+      PRODUCTS_URL: https://products-primario:5002
+      PRODUCTS_REPLICA_URL: https://products-replica:5012
+      HEARTBEAT_INTERVAL_MS: 5000
+      HEARTBEAT_MAX_FAILURES: 2
+    ports:
+      - "8080:8080"
+    depends_on:
+      - users
+      - products-primario
+      - products-replica
+      - orders
+
+volumes:
+  data:
