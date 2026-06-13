@@ -41,17 +41,12 @@ interna inteiramente em **HTTPS/TLS** (CA própria).
 
 Existem **duas formas**. Escolha uma.
 
-<<<<<<< HEAD
-### Opção A — Localmente com Python (recomendada para correção rápida)
-=======
 ### Opção A: Localmente com Python (recomendada para correção rápida)
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 
 Pré-requisito: **Python 3.10+** e **openssl** no PATH (já vem com Git for
 Windows, macOS e a maioria das distros Linux).
 
 ```bash
-<<<<<<< HEAD
 # 1. Entre na pasta do projeto
 cd ecommerce
 
@@ -66,22 +61,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # 4. Suba TODOS os serviços com um único comando
-=======
-1. Entre na pasta do projeto
-cd ecommerce
-
-2. (Opcional) crie um ambiente virtual
-python -m venv .venv
-Windows:
-.venv\Scripts\activate
-Linux/Mac:
-source .venv/bin/activate
-
-3. Instale a dependência
-pip install -r requirements.txt
-
-4. Suba TODOS os serviços com um único comando
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 python scripts/start_all.py
 ```
 
@@ -92,11 +71,7 @@ processos separados:
 `Pedidos (5003)` e `Gateway (8080)` — todos servindo HTTPS.
 
 ```bash
-<<<<<<< HEAD
 # 5. (Opcional, em outro terminal) popule dados de exemplo
-=======
-5. (Opcional, em outro terminal) popule dados de exemplo
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 python scripts/seed.py
 ```
 
@@ -112,11 +87,7 @@ Acesse no navegador: **https://localhost:8080** (loja) e
 > Se preferir não usar TLS, defina `USE_TLS=false` no `.env` antes de subir —
 > os serviços passam a usar HTTP simples.
 
-<<<<<<< HEAD
-### Opção B — Docker Compose
-=======
 ### Opção B: Docker Compose
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 
 Pré-requisito: **Docker** e **Docker Compose**.
 
@@ -176,11 +147,7 @@ Acesse **https://localhost:8080**. Para popular dados:
 > de CA) ou aponte `--cacert certs/ca.crt`.
 
 ```bash
-<<<<<<< HEAD
 # Registrar e logar
-=======
--- Registrar e logar
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 curl -k -X POST https://localhost:8080/users/register \
   -H "Content-Type: application/json" \
   -d '{"name":"Joao","email":"joao@test.com","password":"123456"}'
@@ -189,26 +156,15 @@ TOKEN=$(curl -sk -X POST https://localhost:8080/users/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@fccpd.com","password":"admin123"}' | python -c "import sys,json;print(json.load(sys.stdin)['token'])")
 
-<<<<<<< HEAD
 # Criar produto (admin)
-=======
--- Criar produto (admin)
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 curl -k -X POST https://localhost:8080/products \
   -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
   -d '{"name":"Mouse","price":99.9,"stock":10}'
 
-<<<<<<< HEAD
 # Listar produtos
 curl -k https://localhost:8080/products
 
 # Criar pedido
-=======
--- Listar produtos
-curl -k https://localhost:8080/products
-
--- Criar pedido
->>>>>>> 3fff2b1e708c5f94f7a71c5e3683da5c65cee66c
 curl -k -X POST https://localhost:8080/orders \
   -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
   -d '{"productId":"<id-do-produto>","quantity":2}'
