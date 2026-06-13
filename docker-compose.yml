@@ -1,6 +1,6 @@
 # Sobe toda a infraestrutura: 4 microsservicos (Produtos com 2 replicas) + Gateway.
 # Uso:  docker compose up --build
-# Acesse a loja em http://localhost:8080
+# Acesse a loja em https://localhost:8080
 services:
   users:
     build: .
@@ -21,7 +21,7 @@ services:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       PRODUCTS_PORT: 5002
       PRODUCTS_DATA_FILE: /app/data/products_primary.db
-      PRODUCTS_PEER_URL: http://products-replica:5012
+      PRODUCTS_PEER_URL: https://products-replica:5012
       PRODUCTS_NODE_NAME: produtos-primario
     volumes:
       - data:/app/data
@@ -35,7 +35,7 @@ services:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       PRODUCTS_PORT: 5012
       PRODUCTS_DATA_FILE: /app/data/products_replica.db
-      PRODUCTS_PEER_URL: http://products-primario:5002
+      PRODUCTS_PEER_URL: https://products-primario:5002
       PRODUCTS_NODE_NAME: produtos-replica
     volumes:
       - data:/app/data
@@ -49,7 +49,7 @@ services:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       ORDERS_PORT: 5003
       ORDERS_DATA_FILE: /app/data/orders.db
-      PRODUCTS_URL: http://products-primario:5002
+      PRODUCTS_URL: https://products-primario:5002
     volumes:
       - data:/app/data
     ports:
@@ -61,10 +61,10 @@ services:
     environment:
       JWT_SECRET: chave-secreta-fccpd-ecommerce-2026
       GATEWAY_PORT: 8080
-      USERS_URL: http://users:5001
-      ORDERS_URL: http://orders:5003
-      PRODUCTS_URL: http://products-primario:5002
-      PRODUCTS_REPLICA_URL: http://products-replica:5012
+      USERS_URL: https://users:5001
+      ORDERS_URL: https://orders:5003
+      PRODUCTS_URL: https://products-primario:5002
+      PRODUCTS_REPLICA_URL: https://products-replica:5012
       HEARTBEAT_INTERVAL_MS: 5000
       HEARTBEAT_MAX_FAILURES: 2
     ports:

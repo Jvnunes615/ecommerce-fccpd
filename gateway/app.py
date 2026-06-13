@@ -19,12 +19,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, request, Response, jsonify, send_from_directory
 
 from common import config, http_client
+from common.tls import flask_ssl_context, scheme
 
 PORT = config.get_int("GATEWAY_PORT", 8080)
-USERS_URL = config.get("USERS_URL", "http://localhost:5001")
-ORDERS_URL = config.get("ORDERS_URL", "http://localhost:5003")
-PRODUCTS_URL = config.get("PRODUCTS_URL", "http://localhost:5002")
-PRODUCTS_REPLICA_URL = config.get("PRODUCTS_REPLICA_URL", "http://localhost:5012")
+_s = scheme()   # "https" ou "http" dependendo de USE_TLS
+USERS_URL = config.get("USERS_URL", f"{_s}://localhost:5001")
+ORDERS_URL = config.get("ORDERS_URL", f"{_s}://localhost:5003")
+PRODUCTS_URL = config.get("PRODUCTS_URL", f"{_s}://localhost:5002")
+PRODUCTS_REPLICA_URL = config.get("PRODUCTS_REPLICA_URL", f"{_s}://localhost:5012")
 
 HEARTBEAT_INTERVAL_MS = config.get_int("HEARTBEAT_INTERVAL_MS", 5000)
 HEARTBEAT_MAX_FAILURES = config.get_int("HEARTBEAT_MAX_FAILURES", 2)
@@ -186,7 +188,9 @@ def assets(filename):
 
 
 if __name__ == "__main__":
+    ssl_ctx = flask_ssl_context()
+    proto = "https" if ssl_ctx else "http"
     threading.Thread(target=heartbeat_loop, daemon=True).start()
-    log(f"API Gateway na porta {PORT}")
+    log(f"API Gateway na porta {PORT} [{proto}]")
     log(f"Heartbeat a cada {HEARTBEAT_INTERVAL_MS}ms, tolerancia de {HEARTBEAT_MAX_FAILURES} falhas.")
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    app.run(host="0.0.0.0", port=PORT, threaded=True, ssl_context=ssl_ctx)

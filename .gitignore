@@ -3,6 +3,7 @@ __pycache__/
 data/
 *.db
 *.log
+certs/
 .env
 venv/
 .venv/

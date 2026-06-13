@@ -9,8 +9,9 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from common import config, http_client  # noqa: E402
+from common.tls import scheme as _scheme  # noqa: E402
 
-GATEWAY = f"http://localhost:{config.get('GATEWAY_PORT', '8080')}"
+GATEWAY = f"{_scheme()}://localhost:{config.get('GATEWAY_PORT', '8080')}"
 
 ADMIN = {"name": "Admin", "email": "admin@fccpd.com", "password": "admin123", "role": "admin"}
 PRODUCTS = [

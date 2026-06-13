@@ -1,8 +1,31 @@
-"""Cliente HTTP minimo baseado em urllib (stdlib), evitando a dependencia
-`requests`. Usado na comunicacao entre microsservicos (REST/JSON)."""
+"""Cliente HTTP com suporte a HTTPS (TLS) baseado em urllib (stdlib).
+
+Para comunicacao interna entre microsservicos usa o certificado CA proprio
+(certs/ca.crt), validando a identidade do servidor sem precisar de uma CA
+publica. O SSL pode ser desabilitado via variavel de ambiente USE_TLS=false.
+"""
 import json
+import os
+import ssl
 import urllib.error
 import urllib.request
+
+from common import config
+
+USE_TLS = config.get("USE_TLS", "true").lower() != "false"
+CA_CERT = os.path.join(config.PROJECT_ROOT, "certs", "ca.crt")
+
+
+def _ssl_context():
+    """Contexto SSL que confia apenas no CA proprio do projeto.
+
+    check_hostname e verify_mode sao mantidos nos valores seguros padrao
+    (True / CERT_REQUIRED). A verificacao funciona corretamente porque o
+    server.crt tem SANs cobrindo localhost, 127.0.0.1 e os nomes Docker.
+    """
+    if not USE_TLS or not os.path.exists(CA_CERT):
+        return None
+    return ssl.create_default_context(cafile=CA_CERT)
 
 
 class HttpResponse:
@@ -29,13 +52,12 @@ def request(method, url, json_body=None, headers=None, timeout=5):
         hdrs.setdefault("Content-Type", "application/json")
 
     req = urllib.request.Request(url, data=data, headers=hdrs, method=method)
+    ctx = _ssl_context()
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
             return HttpResponse(resp.status, resp.read().decode())
     except urllib.error.HTTPError as exc:
-        # Resposta com status de erro (4xx/5xx) ainda traz corpo util.
         return HttpResponse(exc.code, exc.read().decode())
-    # urllib.error.URLError e socket.timeout sobem para o chamador tratar.
 
 
 def get(url, **kwargs):

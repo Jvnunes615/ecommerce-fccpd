@@ -18,6 +18,7 @@ from flask import Flask, request, jsonify
 from common import config
 from common.store import SqliteStore as JsonStore
 from common.auth import hash_password, verify_password, sign_token, require_auth
+from common.tls import flask_ssl_context
 
 PORT = config.get_int("USERS_PORT", 5001)
 DATA_FILE = config.get(
@@ -97,5 +98,7 @@ def get_user(user_id):
 
 
 if __name__ == "__main__":
-    log(f"Servico de Usuarios na porta {PORT} (dados: {DATA_FILE})")
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    ssl_ctx = flask_ssl_context()
+    proto = "https" if ssl_ctx else "http"
+    log(f"Servico de Usuarios na porta {PORT} [{proto}] (dados: {DATA_FILE})")
+    app.run(host="0.0.0.0", port=PORT, threaded=True, ssl_context=ssl_ctx)

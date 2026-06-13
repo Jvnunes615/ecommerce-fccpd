@@ -24,8 +24,11 @@ PRODUCTS_REPLICA_PORT = config.get("PRODUCTS_REPLICA_PORT", "5012")
 ORDERS_PORT = config.get("ORDERS_PORT", "5003")
 GATEWAY_PORT = config.get("GATEWAY_PORT", "8080")
 
-PRODUCTS_URL = config.get("PRODUCTS_URL", f"http://localhost:{PRODUCTS_PORT}")
-PRODUCTS_REPLICA_URL = config.get("PRODUCTS_REPLICA_URL", f"http://localhost:{PRODUCTS_REPLICA_PORT}")
+from common.tls import scheme as _scheme  # noqa: E402
+
+_s = _scheme()
+PRODUCTS_URL = config.get("PRODUCTS_URL", f"{_s}://localhost:{PRODUCTS_PORT}")
+PRODUCTS_REPLICA_URL = config.get("PRODUCTS_REPLICA_URL", f"{_s}://localhost:{PRODUCTS_REPLICA_PORT}")
 
 
 def env_with(extra):
@@ -63,13 +66,22 @@ def shutdown(*_):
     sys.exit(0)
 
 
+def ensure_certs():
+    """Gera os certificados TLS se ainda nao existirem."""
+    ca = os.path.join(ROOT, "certs", "ca.crt")
+    if not os.path.exists(ca):
+        print("Certificados TLS nao encontrados. Gerando...")
+        subprocess.check_call([PY, os.path.join(ROOT, "scripts", "generate_certs.py")])
+
+
 def main():
+    ensure_certs()
     signal.signal(signal.SIGINT, shutdown)
     for name, script, extra in SERVICES:
         p = subprocess.Popen([PY, script], env=env_with(extra), cwd=ROOT)
         procs.append((name, p))
         print(f"  -> {name} iniciado (pid {p.pid})")
-    print("\nTodos os servicos no ar. Acesse http://localhost:%s" % GATEWAY_PORT)
+    print("\nTodos os servicos no ar. Acesse https://localhost:%s" % GATEWAY_PORT)
     print("Pressione Ctrl+C para encerrar.\n")
     for _, p in procs:
         p.wait()

@@ -20,13 +20,14 @@ from flask import Flask, request, jsonify
 from common import config, http_client
 from common.store import SqliteStore as JsonStore
 from common.auth import require_auth
+from common.tls import flask_ssl_context, scheme as _scheme
 
 PORT = config.get_int("ORDERS_PORT", 5003)
 DATA_FILE = config.get(
     "ORDERS_DATA_FILE",
     os.path.join(config.PROJECT_ROOT, "data", "orders.db"),
 )
-PRODUCTS_URL = config.get("PRODUCTS_URL", "http://localhost:5002")
+PRODUCTS_URL = config.get("PRODUCTS_URL", f"{_scheme()}://localhost:5002")
 
 store = JsonStore(DATA_FILE)
 app = Flask(__name__)
@@ -88,5 +89,7 @@ def list_orders(user_id):
 
 
 if __name__ == "__main__":
-    log(f"Servico de Pedidos na porta {PORT} (dados: {DATA_FILE})")
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    ssl_ctx = flask_ssl_context()
+    proto = "https" if ssl_ctx else "http"
+    log(f"Servico de Pedidos na porta {PORT} [{proto}] (dados: {DATA_FILE})")
+    app.run(host="0.0.0.0", port=PORT, threaded=True, ssl_context=ssl_ctx)

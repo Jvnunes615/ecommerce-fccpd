@@ -25,6 +25,7 @@ from flask import Flask, request, jsonify
 from common import config, http_client
 from common.store import SqliteStore as JsonStore
 from common.auth import require_admin
+from common.tls import flask_ssl_context
 
 PORT = config.get_int("PRODUCTS_PORT", 5002)
 DATA_FILE = config.get(
@@ -122,5 +123,7 @@ def create_product():
 
 
 if __name__ == "__main__":
-    log(f"Servico de Produtos na porta {PORT} (dados: {DATA_FILE}, par: {PEER_URL or 'nenhum'})")
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    ssl_ctx = flask_ssl_context()
+    proto = "https" if ssl_ctx else "http"
+    log(f"Servico de Produtos na porta {PORT} [{proto}] (dados: {DATA_FILE}, par: {PEER_URL or 'nenhum'})")
+    app.run(host="0.0.0.0", port=PORT, threaded=True, ssl_context=ssl_ctx)
