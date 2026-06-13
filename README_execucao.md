@@ -147,7 +147,7 @@ Acesse **https://localhost:8080**. Para popular dados:
 > de CA) ou aponte `--cacert certs/ca.crt`.
 
 ```bash
-# Registrar e logar
+-- Registrar e logar
 curl -k -X POST https://localhost:8080/users/register \
   -H "Content-Type: application/json" \
   -d '{"name":"Joao","email":"joao@test.com","password":"123456"}'
@@ -156,15 +156,15 @@ TOKEN=$(curl -sk -X POST https://localhost:8080/users/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@fccpd.com","password":"admin123"}' | python -c "import sys,json;print(json.load(sys.stdin)['token'])")
 
-# Criar produto (admin)
+-- Criar produto (admin)
 curl -k -X POST https://localhost:8080/products \
   -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
   -d '{"name":"Mouse","price":99.9,"stock":10}'
 
-# Listar produtos
+-- Listar produtos
 curl -k https://localhost:8080/products
 
-# Criar pedido
+-- Criar pedido
 curl -k -X POST https://localhost:8080/orders \
   -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" \
   -d '{"productId":"<id-do-produto>","quantity":2}'
