@@ -41,26 +41,26 @@ interna inteiramente em **HTTPS/TLS** (CA própria).
 
 Existem **duas formas**. Escolha uma.
 
-### Opção A — Localmente com Python (recomendada para correção rápida)
+### Opção A: Localmente com Python (recomendada para correção rápida)
 
 Pré-requisito: **Python 3.10+** e **openssl** no PATH (já vem com Git for
 Windows, macOS e a maioria das distros Linux).
 
 ```bash
-# 1. Entre na pasta do projeto
+1. Entre na pasta do projeto
 cd ecommerce
 
-# 2. (Opcional) crie um ambiente virtual
+2. (Opcional) crie um ambiente virtual
 python -m venv .venv
-# Windows:
+Windows:
 .venv\Scripts\activate
-# Linux/Mac:
+Linux/Mac:
 source .venv/bin/activate
 
-# 3. Instale a dependência
+3. Instale a dependência
 pip install -r requirements.txt
 
-# 4. Suba TODOS os serviços com um único comando
+4. Suba TODOS os serviços com um único comando
 python scripts/start_all.py
 ```
 
@@ -87,7 +87,7 @@ Acesse no navegador: **https://localhost:8080** (loja) e
 > Se preferir não usar TLS, defina `USE_TLS=false` no `.env` antes de subir —
 > os serviços passam a usar HTTP simples.
 
-### Opção B — Docker Compose
+### Opção B: Docker Compose
 
 Pré-requisito: **Docker** e **Docker Compose**.
 
