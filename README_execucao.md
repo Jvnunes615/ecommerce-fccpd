@@ -71,7 +71,7 @@ processos separados:
 `Pedidos (5003)` e `Gateway (8080)` — todos servindo HTTPS.
 
 ```bash
-# 5. (Opcional, em outro terminal) popule dados de exemplo
+5. (Opcional, em outro terminal) popule dados de exemplo
 python scripts/seed.py
 ```
 
