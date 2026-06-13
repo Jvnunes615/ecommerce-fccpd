@@ -30,7 +30,6 @@ Usuarios :5001 Produtos Pedidos :5003
 (primario/replica, HTTPS)
 (HTTPS)
 
-
 ## Como executar
 
 Instruções completas (Python local ou Docker Compose) estão em
@@ -41,24 +40,5 @@ Instruções completas (Python local ou Docker Compose) estão em
 pip install -r requirements.txt
 python scripts/start_all.py
 
-Acesse **https://localhost:8080** (loja) e **https://localhost:8080/dashboard** (monitoramento).
 
-## Relatório
-
-O relatório técnico, respondendo às perguntas sobre comunicação, consistência,
-tolerância a falhas, segurança JWT e limitações, está em
-[`relatorio.pdf`](relatorio.pdf).
-
-## Tecnologias
-
-- Python 3 + Flask
-- JWT (HS256) e hash de senha (PBKDF2-HMAC-SHA256) via biblioteca padrão
-- SQLite
-- HTTPS/TLS com CA própria
-- HTML/CSS/JS puro
-- Docker / Docker Compose
-
-## Autor
-
-João Victor Nunes
     
